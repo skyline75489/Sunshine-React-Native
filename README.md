@@ -1,6 +1,11 @@
 React Native Sunshine
 =====================
 
-A [React-Native](https://github.com/facebook/react-native) clone of Android app [Sunshine](https://github.com/udacity/Sunshine).
+A simple and incomplete clone of Android app [Sunshine](https://github.com/udacity/Sunshine) powered by [React-Native](https://github.com/facebook/react-native).
 
 ![screenshot](sunshine.gif)
+
+License
+=======
+
+The MIT License
