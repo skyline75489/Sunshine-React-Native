@@ -29,8 +29,6 @@ var FORECAST_BASE_URL = 'http://api.openweathermap.org/data/2.5/forecast/daily';
 
 var FAKE_DATA = JSON.parse('{"cod":"200","message":0.0219,"city":{"id":6058560,"name":"London","coord":{"lon":-81.23304,"lat":42.983391},"country":"CA","population":0,"sys":{"population":0}},"cnt":7,"list":[{"dt":1431018000,"temp":{"day":15.88,"min":9.18,"max":15.88,"night":9.18,"eve":15.88,"morn":15.88},"pressure":994.67,"humidity":60,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01n"}],"speed":1.84,"deg":200,"clouds":0},{"dt":1431104400,"temp":{"day":28.7,"min":16.81,"max":28.7,"night":19.23,"eve":24.54,"morn":16.81},"pressure":993.32,"humidity":53,"weather":[{"id":801,"main":"Clouds","description":"few clouds","icon":"02d"}],"speed":5.41,"deg":217,"clouds":20},{"dt":1431190800,"temp":{"day":28.46,"min":17.57,"max":29.06,"night":17.57,"eve":27.14,"morn":19.64},"pressure":992.84,"humidity":52,"weather":[{"id":501,"main":"Rain","description":"moderate rain","icon":"10d"}],"speed":9.36,"deg":192,"clouds":12,"rain":5.04},{"dt":1431277200,"temp":{"day":19.43,"min":12.92,"max":19.43,"night":17.08,"eve":18.64,"morn":12.92},"pressure":998.84,"humidity":0,"weather":[{"id":502,"main":"Rain","description":"heavy intensity rain","icon":"10d"}],"speed":1.79,"deg":54,"clouds":48,"rain":20.28},{"dt":1431363600,"temp":{"day":20.28,"min":10.82,"max":20.28,"night":10.82,"eve":17.88,"morn":17.55},"pressure":991.94,"humidity":0,"weather":[{"id":502,"main":"Rain","description":"heavy intensity rain","icon":"10d"}],"speed":8.35,"deg":215,"clouds":57,"rain":14.78},{"dt":1431450000,"temp":{"day":12.17,"min":4.74,"max":12.17,"night":4.74,"eve":8.77,"morn":9.8},"pressure":998.79,"humidity":0,"weather":[{"id":500,"main":"Rain","description":"light rain","icon":"10d"}],"speed":7.77,"deg":289,"clouds":53,"rain":1.22},{"dt":1431536400,"temp":{"day":15.34,"min":6.07,"max":15.34,"night":6.79,"eve":15.11,"morn":6.07},"pressure":1007.8,"humidity":0,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01d"}],"speed":6.51,"deg":264,"clouds":0}]}');
 
-var currentDetail = {}
-
 var parameters = {
   'q': city,
   'mode': format,
@@ -78,8 +76,9 @@ var requestURL = Utils.buildUrl(FORECAST_BASE_URL, parameters);
 var DetailWeather = React.createClass({
   render: function() {
     var today = new Date();
-
-    var todayArt = Utils.getArtForTodayWeather(currentDetail.weather[0].id);
+    
+    console.log(this.props.currentDetail)
+    var todayArt = Utils.getArtForTodayWeather(this.props.currentDetail.weather[0].id);
     var todayArtSource = todayWeatherArt[todayArt];
     return (
       <View style={detailStyles.detailContainer}>
@@ -89,10 +88,10 @@ var DetailWeather = React.createClass({
             Today, {monthNames[today.getMonth()]} {today.getDate()}
           </Text>
           <Text style={detailStyles.todayMaxTemp}>
-            {currentDetail.temp.max.toFixed(0)}º
+            {this.props.currentDetail.temp.max.toFixed(0)}º
           </Text>
           <Text style={detailStyles.todayMinTemp}>
-            {currentDetail.temp.min.toFixed(0)}º
+            {this.props.currentDetail.temp.min.toFixed(0)}º
           </Text>
         </View>
 
@@ -100,14 +99,14 @@ var DetailWeather = React.createClass({
             <Image source={todayArtSource} style={todayStyles.todayArt}>
             </Image>
             <Text style={detailStyles.todayWeatherMain}>
-            {currentDetail.weather[0].main}
+            {this.props.currentDetail.weather[0].main}
             </Text>
         </View>
       </View>
       <View style={detailStyles.todayMoreDetailView}>
-        <Text style={detailStyles.todayMoreDetail}>Humidity: {currentDetail.humidity} %</Text>
-        <Text style={detailStyles.todayMoreDetail}>Pressure: {currentDetail.pressure} hPa</Text>
-        <Text style={detailStyles.todayMoreDetail}>Wind: {currentDetail.speed} km/h NE</Text>
+        <Text style={detailStyles.todayMoreDetail}>Humidity: {this.props.currentDetail.humidity} %</Text>
+        <Text style={detailStyles.todayMoreDetail}>Pressure: {this.props.currentDetail.pressure} hPa</Text>
+        <Text style={detailStyles.todayMoreDetail}>Wind: {this.props.currentDetail.speed} km/h NE</Text>
       </View>
       </View>
     );
@@ -116,9 +115,9 @@ var DetailWeather = React.createClass({
 
 var TodayBanner = React.createClass({
   onPress: function() {
-    currentDetail = this.props.today;
     this.props.navigator.push({
       name: 'detail',
+      detail: this.props.today
     });
   },
   
@@ -160,6 +159,8 @@ var TodayBanner = React.createClass({
 var IndexView = React.createClass({
   getInitialState: function() { 
     return {
+      name: '',
+      navigator: null,
       today: {},
       dataSource: new ListView.DataSource({ 
         rowHasChanged: (row1, row2) => row1 !== row2, 
@@ -169,13 +170,13 @@ var IndexView = React.createClass({
   },
   
   componentDidMount: function() { 
-    //this.fetchData(); 
+    this.fetchData(); 
     // Fake data down here
-    this.setState({ 
+    /*this.setState({ 
       today: FAKE_DATA.list.shift(),
       dataSource: this.state.dataSource.cloneWithRows(FAKE_DATA.list), 
       loaded: true, 
-    });
+    });*/
   },
   
   fetchData: function() { 
@@ -183,7 +184,7 @@ var IndexView = React.createClass({
       .then((response) => response.json()) 
       .then((responseData) => { 
         this.setState({ 
-          today: FAKE_DATA.list.shift(),
+          today: responseData.list.shift(),
           dataSource: this.state.dataSource.cloneWithRows(responseData.list), 
           loaded: true, 
         }); 
@@ -213,9 +214,9 @@ var IndexView = React.createClass({
     var iconSource = weatherIcon[icon];
     return (      
       <TouchableHighlight onPress={()=>{
-        currentDetail = data;
         this.props.navigator.push({
           name: 'detail',
+          detail: data
         });
       }}>
       <View style={styles.container}>
@@ -257,10 +258,10 @@ var IndexView = React.createClass({
 var Sunshine = React.createClass({
   renderScene: function(route, nav) {
     switch(route.name) {
-    case 'index':
-      return <IndexView name={route.name} navigator={nav}/>;
-    case 'detail':
-      return <DetailWeather name={route.name} navigator={nav}></DetailWeather>;
+      case 'index':
+        return <IndexView name={route.name} navigator={nav}/>;
+      case 'detail':
+        return <DetailWeather name={route.name} navigator={nav} currentDetail={route.detail}></DetailWeather>;
     }
   },
   render: function() {
