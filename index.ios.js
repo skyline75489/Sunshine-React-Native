@@ -15,6 +15,7 @@ var {
   ScrollView,
   TouchableHighlight,
   TouchableWithoutFeedback,
+  StatusBarIOS,
   Navigator,
   Text,
   View,
@@ -73,11 +74,11 @@ var todayWeatherArt = {
 
 var requestURL = Utils.buildUrl(FORECAST_BASE_URL, parameters);
 
+StatusBarIOS.setStyle(4);
+
 var DetailWeather = React.createClass({
-  render: function() {
+  render: function() {    
     var today = new Date();
-    
-    console.log(this.props.currentDetail)
     var todayArt = Utils.getArtForTodayWeather(this.props.currentDetail.weather[0].id);
     var todayArtSource = todayWeatherArt[todayArt];
     return (
@@ -159,8 +160,6 @@ var TodayBanner = React.createClass({
 var IndexView = React.createClass({
   getInitialState: function() { 
     return {
-      name: '',
-      navigator: null,
       today: {},
       dataSource: new ListView.DataSource({ 
         rowHasChanged: (row1, row2) => row1 !== row2, 
@@ -170,13 +169,13 @@ var IndexView = React.createClass({
   },
   
   componentDidMount: function() { 
-    this.fetchData(); 
+    //this.fetchData(); 
     // Fake data down here
-    /*this.setState({ 
+    this.setState({ 
       today: FAKE_DATA.list.shift(),
       dataSource: this.state.dataSource.cloneWithRows(FAKE_DATA.list), 
       loaded: true, 
-    });*/
+    });
   },
   
   fetchData: function() { 
@@ -197,7 +196,9 @@ var IndexView = React.createClass({
       return this.renderLoadingView(); 
     }
     return (
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} contentInset={{top: -480}}>
+        <View style={styles.scrollViewUp}>
+        </View>
         <TodayBanner today={this.state.today} navigator={this.props.navigator}>
         </TodayBanner>
       
@@ -257,6 +258,7 @@ var IndexView = React.createClass({
 
 var Sunshine = React.createClass({
   renderScene: function(route, nav) {
+    console.log('Rendering Scene')
     switch(route.name) {
       case 'index':
         return <IndexView name={route.name} navigator={nav}/>;
@@ -366,8 +368,12 @@ var detailStyles = StyleSheet.create({
 });
 
 var styles = StyleSheet.create({
+  scrollViewUp: {
+    backgroundColor: '#64c2f4', 
+    height: 480
+  },
   scrollView: {
-    backgroundColor: '#EEEEEE', 
+    backgroundColor: '#EEEEEE',
   },
   container: {
     flex: 4,

@@ -62,7 +62,7 @@ exports.getArtForTodayWeather = function(weatherId) {
   } else if (weatherId == 801) {
     return 'art_light_clouds';
   } else if (weatherId >= 802 && weatherId <= 804) {
-    return 'art_cloudy';
+    return 'art_clouds';
   }
   return -1;
 }
