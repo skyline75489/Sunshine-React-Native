@@ -1,5 +1,27 @@
 'use strict';
 
+var dayMap = {
+  0: 'Sunday',
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Saturday',
+};
+
+var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+exports.getDayName = function(day) {
+  return dayMap[day];
+};
+
+exports.getMonthName = function(month) {
+  return monthNames[month];
+};
+
 exports.buildUrl = function(url, parameters){
   var qs = "";
   for(var key in parameters) {
@@ -37,7 +59,7 @@ exports.getIconForWeather = function(weatherId) {
   } else if (weatherId >= 802 && weatherId <= 804) {
     return 'ic_cloudy';
   }
-    return -1;
+  return -1;
 }
 
 exports.getArtForTodayWeather = function(weatherId) {
