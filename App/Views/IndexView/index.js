@@ -11,6 +11,7 @@ var {
   TouchableHighlight,
   AsyncStorage,
   NetInfo,
+  ActivityIndicatorIOS,
 } = React;
 
 var styles = require('./styles');
@@ -47,16 +48,7 @@ var IndexView = React.createClass({
     NetInfo.reachabilityIOS.fetch().done((reach) => {
       console.log('Initial: ' + reach);
       if (reach == 'none') {
-         AsyncStorage.getItem(STORAGE_KEY)
-          .then((value) => {
-            var v = JSON.parse(value);
-            this.setState({ 
-              today: v.list.shift(),
-              dataSource: this.state.dataSource.cloneWithRows(v.list), 
-              loaded: true, 
-            }); 
-          })
-          .done();
+        this.useLocalStorage();
       } else {
           this.fetchData(); 
       }
@@ -68,23 +60,42 @@ var IndexView = React.createClass({
       loaded: true, 
     });*/
   },
-  
+  useLocalStorage: function() {
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((value) => {
+        var v = JSON.parse(value);
+        this.setState({ 
+          today: v.list.shift(),
+          dataSource: this.state.dataSource.cloneWithRows(v.list), 
+          loaded: true, 
+        }); 
+      })
+      .done();
+
+  },
+
   fetchData: function() { 
     fetch(api.REQUEST_URL) 
       .then((response) => response.json()) 
-      .then((responseData) => { 
+      .then((responseData) => {
+        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseData))
+         .then(() => {
+          console.log("Writing to local storage");
+         })
+         .catch((error) => {
+          console.log(error);
+         })
+         .done();
         this.setState({ 
           today: responseData.list.shift(),
           dataSource: this.state.dataSource.cloneWithRows(responseData.list), 
           loaded: true, 
         }); 
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseData))
-         .then(() => {
-          console.log("Writing");
-         })
-         .catch((error) => {})
-         .done();
       }) 
+      .catch((error) => {
+        console.log(error);
+        this.useLocalStorage();
+      })
       .done();
   },
   
@@ -145,10 +156,13 @@ var IndexView = React.createClass({
   
   renderLoadingView: function() { 
     return ( 
-      <View style={styles.container}> 
-        <Text> Loading... 
-        </Text> 
-      </View> 
+      <View style={styles.horizontal}>
+      <ActivityIndicatorIOS
+        animating={true}
+        style={[styles.centering, {height: 80}]}
+        size="large"
+      />
+      </View>
     ); 
   },
 });

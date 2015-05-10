@@ -56,6 +56,15 @@ module.exports = StyleSheet.create({
   weatherIcon: {
     width: 40,
     height: 40,
-  }
+  },
+  centering: {
+    paddingTop: 280,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
 });
 
