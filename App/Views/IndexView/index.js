@@ -18,6 +18,9 @@ var styles = require('./styles');
 var Utils = require('../../Utils/functions.js');
 var api = require('../../Network/api.js');
 var TodayBanner = require('./TodayBanner.js');
+var Menu = require('../MenuView');
+
+var SideMenu = require('react-native-side-menu');
 
 var STORAGE_KEY = '@LocalData:data';
 
@@ -103,7 +106,10 @@ var IndexView = React.createClass({
     if (!this.state.loaded) { 
       return this.renderLoadingView(); 
     }
+    var menu = <Menu navigator={this.props.navigator} name={this.props.name}/>;
     return (
+      <SideMenu menu={menu}>
+
       <ScrollView style={styles.scrollView} contentInset={{top: -480}}>
         <View style={styles.scrollViewUp}>
         </View>
@@ -115,6 +121,7 @@ var IndexView = React.createClass({
          renderRow={this.renderRow} 
          style={styles.listView} />
       </ScrollView>
+      </SideMenu>
     );
   },
   
