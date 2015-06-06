@@ -8,4 +8,4 @@ A simple and incomplete clone of Android app [Sunshine](https://github.com/udaci
 License
 =======
 
-The MIT License
+MIT License

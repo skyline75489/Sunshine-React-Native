@@ -3,7 +3,7 @@
 var React = require('react-native');
 
 var {
-  View, 
+  View,
   Text,
   Image
 } = React;
@@ -22,7 +22,7 @@ var todayWeatherArt = {
 };
 
 var DetailWeatherView = React.createClass({
-  render: function() {    
+  render: function() {
     var today = new Date();
     var todayArt = Utils.getArtForTodayWeather(this.props.currentDetail.weather[0].id);
     var todayArtSource = todayWeatherArt[todayArt];
