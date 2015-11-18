@@ -8,14 +8,11 @@ var React = require('react-native');
 
 var {
   AppRegistry,
-  StatusBarIOS,
   Navigator,
 } = React;
 
 var IndexView = require('./App/Views/IndexView');
 var DetailWeatherView = require('./App/Views/DetailView');
-
-StatusBarIOS.setStyle(4);
 
 var Sunshine = React.createClass({
   renderScene: function(route, nav) {

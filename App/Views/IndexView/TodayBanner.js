@@ -3,7 +3,7 @@
 var React = require('react-native');
 
 var {
-  View, 
+  View,
   Text,
   Image,
   TouchableWithoutFeedback,
@@ -13,13 +13,13 @@ var {
 var Utils = require('../../Utils/functions.js');
 
 var todayWeatherArt = {
-  art_clear: require('image!art_clear'),
-  art_clouds: require('image!art_clouds'),
-  art_fog: require('image!art_fog'),
-  art_light_clouds: require('image!art_light_rain'),
-  art_rain: require('image!art_rain'),
-  art_snow: require('image!art_snow'),
-  art_storm: require('image!art_storm'),
+  art_clear: require('../../Image/art_clear.png'),
+  art_clouds: require('../../Image/art_clouds.png'),
+  art_fog: require('../../Image/art_fog.png'),
+  art_light_clouds: require('../../Image/art_light_rain.png'),
+  art_rain: require('../../Image/art_rain.png'),
+  art_snow: require('../../Image/art_snow.png'),
+  art_storm: require('../../Image/art_storm.png'),
 };
 
 var TodayBanner = React.createClass({
@@ -29,13 +29,13 @@ var TodayBanner = React.createClass({
       detail: this.props.today
     });
   },
-  
+
   render: function() {
     var today = new Date();
 
     var todayArt = Utils.getArtForTodayWeather(this.props.today.weather[0].id);
     var todayArtSource = todayWeatherArt[todayArt];
-    
+
     return (
       <TouchableWithoutFeedback onPress={this.onPress}>
       <View style={todayStyles.todayContainer}>
@@ -50,7 +50,7 @@ var TodayBanner = React.createClass({
             {this.props.today.temp.min.toFixed(0)}º
           </Text>
         </View>
-      
+
         <View style={todayStyles.todayRightContainer}>
             <Image source={todayArtSource} style={todayStyles.todayArt}>
             </Image>

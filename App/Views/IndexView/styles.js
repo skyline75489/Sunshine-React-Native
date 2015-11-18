@@ -8,8 +8,8 @@ var {
 
 module.exports = StyleSheet.create({
   scrollViewUp: {
-    backgroundColor: '#64c2f4', 
-    height: 480
+    backgroundColor: '#64c2f4',
+    height: 60
   },
   scrollView: {
     backgroundColor: '#EEEEEE',
@@ -29,12 +29,12 @@ module.exports = StyleSheet.create({
   middleContainer: {
     flex: 2.2,
   },
-  rightContainer: { 
-    flex: 1, 
+  rightContainer: {
+    flex: 1,
   },
-  listView: { 
-    paddingTop: 10, 
-    backgroundColor: '#EEEEEE', 
+  listView: {
+    paddingTop: 10,
+    backgroundColor: '#EEEEEE',
   },
   bigDate: {
     color: '#646464',
@@ -67,4 +67,3 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-around',
   },
 });
-

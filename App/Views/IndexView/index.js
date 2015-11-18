@@ -3,7 +3,7 @@
 var React = require('react-native');
 
 var {
-  View, 
+  View,
   Text,
   Image,
   ListView,
@@ -22,61 +22,61 @@ var TodayBanner = require('./TodayBanner.js');
 var STORAGE_KEY = '@LocalData:data';
 
 var weatherIcon = {
-  ic_clear: require('image!ic_clear'),
-  ic_cloudy: require('image!ic_cloudy'),
-  ic_fog: require('image!ic_fog'),
-  ic_light_clouds: require('image!ic_light_clouds'),
-  ic_light_rain: require('image!ic_light_rain'),
-  ic_rain: require('image!ic_rain'),
-  ic_snow: require('image!ic_snow'),
-  ic_storm: require('image!ic_storm'),
+  ic_clear: require('../../Image/ic_clear.png'),
+  ic_cloudy: require('../../Image/ic_cloudy.png'),
+  ic_fog: require('../../Image/ic_fog.png'),
+  ic_light_clouds: require('../../Image/ic_light_clouds.png'),
+  ic_light_rain: require('../../Image/ic_light_rain.png'),
+  ic_rain: require('../../Image/ic_rain.png'),
+  ic_snow: require('../../Image/ic_snow.png'),
+  ic_storm: require('../../Image/ic_storm.png'),
 };
 
 var IndexView = React.createClass({
-  getInitialState: function() { 
+  getInitialState: function() {
     return {
       today: {},
-      dataSource: new ListView.DataSource({ 
-        rowHasChanged: (row1, row2) => row1 !== row2, 
-      }), 
-      loaded: false, 
-    }; 
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
+      loaded: false,
+    };
   },
-  
-  componentDidMount: function() { 
 
-    NetInfo.reachabilityIOS.fetch().done((reach) => {
+  componentDidMount: function() {
+    /*
+    NetInfo.fetch().done((reach) => {
       console.log('Initial: ' + reach);
       if (reach == 'none') {
         this.useLocalStorage();
       } else {
-          this.fetchData(); 
+        this.fetchData();
       }
-    });
-    // Fake data down here
-    /* this.setState({ 
-      today: api.FAKE_DATA.list.shift(),
-      dataSource: this.state.dataSource.cloneWithRows(api.FAKE_DATA.list), 
-      loaded: true, 
     });*/
+    // Fake data down here
+    this.setState({
+      today: api.FAKE_DATA.list.shift(),
+      dataSource: this.state.dataSource.cloneWithRows(api.FAKE_DATA.list),
+      loaded: true,
+    });
   },
   useLocalStorage: function() {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((value) => {
         var v = JSON.parse(value);
-        this.setState({ 
+        this.setState({
           today: v.list.shift(),
-          dataSource: this.state.dataSource.cloneWithRows(v.list), 
-          loaded: true, 
-        }); 
+          dataSource: this.state.dataSource.cloneWithRows(v.list),
+          loaded: true,
+        });
       })
       .done();
 
   },
 
-  fetchData: function() { 
-    fetch(api.REQUEST_URL) 
-      .then((response) => response.json()) 
+  fetchData: function() {
+    fetch(api.REQUEST_URL)
+      .then((response) => response.json())
       .then((responseData) => {
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseData))
          .then(() => {
@@ -86,42 +86,41 @@ var IndexView = React.createClass({
           console.log(error);
          })
          .done();
-        this.setState({ 
+        this.setState({
           today: responseData.list.shift(),
-          dataSource: this.state.dataSource.cloneWithRows(responseData.list), 
-          loaded: true, 
-        }); 
-      }) 
+          dataSource: this.state.dataSource.cloneWithRows(responseData.list),
+          loaded: true,
+        });
+      })
       .catch((error) => {
         console.log(error);
         this.useLocalStorage();
       })
       .done();
   },
-  
+
   render: function() {
-    if (!this.state.loaded) { 
-      return this.renderLoadingView(); 
+    if (!this.state.loaded) {
+      return this.renderLoadingView();
     }
     return (
-      <ScrollView style={styles.scrollView} contentInset={{top: -480}}>
+      <ScrollView style={styles.scrollView}>
         <View style={styles.scrollViewUp}>
         </View>
         <TodayBanner today={this.state.today} navigator={this.props.navigator}>
         </TodayBanner>
-      
         <ListView
          dataSource={this.state.dataSource}
-         renderRow={this.renderRow} 
+         renderRow={this.renderRow}
          style={styles.listView} />
       </ScrollView>
     );
   },
-  
+
   renderRow: function(data) {
     var icon = Utils.getIconForWeather(data.weather[0].id);
     var iconSource = weatherIcon[icon];
-    return (      
+    return (
       <TouchableHighlight onPress={()=>{
         this.props.navigator.push({
           name: 'detail',
@@ -140,7 +139,7 @@ var IndexView = React.createClass({
             {data.weather[0].main}
            </Text>
         </View>
-        
+
         <View style={styles.rightContainer}>
            <Text style={styles.bigTemp}>
             {data.temp.max.toFixed(0)}º
@@ -153,9 +152,9 @@ var IndexView = React.createClass({
       </TouchableHighlight>
     );
   },
-  
-  renderLoadingView: function() { 
-    return ( 
+
+  renderLoadingView: function() {
+    return (
       <View style={styles.horizontal}>
       <ActivityIndicatorIOS
         animating={true}
@@ -163,7 +162,7 @@ var IndexView = React.createClass({
         size="large"
       />
       </View>
-    ); 
+    );
   },
 });
 
