@@ -1,15 +1,11 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('React');
 var Navigator = require('Navigator');
 const {AppRegistry} = require('react-native');
 
-var IndexView = require('./App/Views/IndexView');
-var DetailWeatherView = require('./App/Views/DetailView');
+var IndexView = require('./js/Views/IndexView');
+var DetailWeatherView = require('./js/Views/DetailView');
 
 var Sunshine = React.createClass({
   renderScene: function(route, nav) {
