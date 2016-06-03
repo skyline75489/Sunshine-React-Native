@@ -1,19 +1,15 @@
 'use strict';
 
-var React = require('react-native');
-
-var {
-  View,
-  Text,
-  Image,
-  ListView,
-  ScrollView,
-  TouchableHighlight,
-  AsyncStorage,
-  NetInfo,
-  ActivityIndicatorIOS,
-} = React;
-
+var React = require('React');
+var View = require('View');
+var Image = require('Image');
+var Text = require('Text');
+var ListView = require('ListView');
+var ScrollView = require('ScrollView');
+var TouchableHighlight = require('TouchableHighlight');
+var AsyncStorage = require('AsyncStorage');
+var NetInfo = require('NetInfo');
+var ActivityIndicatorIOS = require('ActivityIndicatorIOS');
 var styles = require('./styles');
 var Utils = require('../../Utils/functions.js');
 var api = require('../../Network/api.js');

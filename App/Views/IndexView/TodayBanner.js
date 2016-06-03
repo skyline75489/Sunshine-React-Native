@@ -1,15 +1,11 @@
 'use strict';
 
-var React = require('react-native');
-
-var {
-  View,
-  Text,
-  Image,
-  TouchableWithoutFeedback,
-  StyleSheet
-} = React;
-
+var React = require('React');
+var StyleSheet = require('StyleSheet');
+var View = require('View');
+var Image = require('Image');
+var Text = require('Text');
+var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 var Utils = require('../../Utils/functions.js');
 
 var todayWeatherArt = {

@@ -4,12 +4,9 @@
  */
 'use strict';
 
-var React = require('react-native');
-
-var {
-  AppRegistry,
-  Navigator,
-} = React;
+var React = require('React');
+var Navigator = require('Navigator');
+const {AppRegistry} = require('react-native');
 
 var IndexView = require('./App/Views/IndexView');
 var DetailWeatherView = require('./App/Views/DetailView');

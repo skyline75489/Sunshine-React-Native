@@ -1,12 +1,9 @@
 'use strict';
 
-var React = require('react-native');
-
-var {
-  View,
-  Text,
-  Image
-} = React;
+var React = require('React');
+var View = require('View');
+var Image = require('Image');
+var Text = require('Text');
 
 var detailStyles = require('./styles');
 var Utils = require('../../Utils/functions.js');
