@@ -1,14 +1,14 @@
-'use strict';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image
+} from 'react-native';
 
-var React = require('React');
-var View = require('View');
-var Image = require('Image');
-var Text = require('Text');
+import {getArtForTodayWeather, getMonthName} from '../../Utils/functions.js';
 
-var detailStyles = require('./styles');
-var Utils = require('../../Utils/functions.js');
-
-var todayWeatherArt = {
+const todayWeatherArt = {
   art_clear: require('../../Image/art_clear.png'),
   art_clouds: require('../../Image/art_clouds.png'),
   art_fog: require('../../Image/art_fog.png'),
@@ -18,42 +18,95 @@ var todayWeatherArt = {
   art_storm: require('../../Image/art_storm.png'),
 };
 
-var DetailWeatherView = React.createClass({
-  render: function() {
-    var today = new Date();
-    var todayArt = Utils.getArtForTodayWeather(this.props.currentDetail.weather[0].id);
-    var todayArtSource = todayWeatherArt[todayArt];
+class DetailWeatherView extends Component {
+  render() {
+    const today = new Date();
+    const todayArt = getArtForTodayWeather(this.props.currentDetail.weather[0].id);
+    const todayArtSource = todayWeatherArt[todayArt];
     return (
-      <View style={detailStyles.detailContainer}>
-      <View style={detailStyles.container}>
-        <View style={detailStyles.todayLeftContainer}>
-          <Text style={detailStyles.todayDate}>
-            Today, {Utils.getMonthName(today.getMonth())} {today.getDate()}
+      <View style={styles.detailContainer}>
+      <View style={styles.container}>
+        <View style={styles.todayLeftContainer}>
+          <Text style={styles.todayDate}>
+            Today, {getMonthName(today.getMonth())} {today.getDate()}
           </Text>
-          <Text style={detailStyles.todayMaxTemp}>
+          <Text style={styles.todayMaxTemp}>
             {this.props.currentDetail.temp.max.toFixed(0)}º
           </Text>
-          <Text style={detailStyles.todayMinTemp}>
+          <Text style={styles.todayMinTemp}>
             {this.props.currentDetail.temp.min.toFixed(0)}º
           </Text>
         </View>
 
-        <View style={detailStyles.todayRightContainer}>
-            <Image source={todayArtSource} style={detailStyles.todayArt}>
+        <View style={styles.todayRightContainer}>
+            <Image source={todayArtSource} style={styles.todayArt}>
             </Image>
-            <Text style={detailStyles.todayWeatherMain}>
+            <Text style={styles.todayWeatherMain}>
             {this.props.currentDetail.weather[0].main}
             </Text>
         </View>
       </View>
-      <View style={detailStyles.todayMoreDetailView}>
-        <Text style={detailStyles.todayMoreDetail}>Humidity: {this.props.currentDetail.humidity} %</Text>
-        <Text style={detailStyles.todayMoreDetail}>Pressure: {this.props.currentDetail.pressure} hPa</Text>
-        <Text style={detailStyles.todayMoreDetail}>Wind: {this.props.currentDetail.speed} km/h NE</Text>
+      <View style={styles.todayMoreDetailView}>
+        <Text style={styles.todayMoreDetail}>Humidity: {this.props.currentDetail.humidity} %</Text>
+        <Text style={styles.todayMoreDetail}>Pressure: {this.props.currentDetail.pressure} hPa</Text>
+        <Text style={styles.todayMoreDetail}>Wind: {this.props.currentDetail.speed} km/h NE</Text>
       </View>
       </View>
     );
   }
+}
+
+const styles = StyleSheet.create({
+  detailContainer: {
+    flex: 2,
+    flexDirection: 'column',
+    backgroundColor: '#EEEEEE',
+  },
+  container: {
+    flex: 0.7,
+    flexDirection: 'row',
+    backgroundColor: '#EEEEEE',
+  },
+  todayLeftContainer: {
+    flex: 1.1,
+    paddingLeft: 40,
+  },
+  todayRightContainer: {
+    paddingTop: 40,
+    flex: 0.9,
+  },
+  todayArt: {
+    width: 110,
+    height: 110,
+  },
+  todayWeatherMain: {
+    color:'#6E6E6E',
+    fontSize: 18,
+    paddingLeft: 35,
+  },
+  todayMoreDetailView: {
+    flex: 1.3,
+    backgroundColor: '#EEEEEE',
+    paddingTop: 20,
+    paddingLeft: 40
+  },
+  todayMoreDetail: {
+    color:'#6E6E6E',
+    fontSize: 22,
+  },
+  todayDate: {
+    paddingTop: 40,
+    color: '#6E6E6E',
+    fontSize: 20,
+  },
+  todayMaxTemp: {
+    color: '#6E6E6E',
+    fontSize: 60,
+  },
+  todayMinTemp: {
+    color: '#6E6E6E',
+    fontSize: 30,
+  },
 });
 
-module.exports = DetailWeatherView;
+export default DetailWeatherView;

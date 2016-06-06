@@ -1,23 +1,24 @@
-'use strict';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ListView,
+  ScrollView,
+  TouchableHighlight,
+  AsyncStorage,
+  NetInfo,
+  ActivityIndicatorIOS,
+} from 'react-native';
 
-var React = require('React');
-var View = require('View');
-var Image = require('Image');
-var Text = require('Text');
-var ListView = require('ListView');
-var ScrollView = require('ScrollView');
-var TouchableHighlight = require('TouchableHighlight');
-var AsyncStorage = require('AsyncStorage');
-var NetInfo = require('NetInfo');
-var ActivityIndicatorIOS = require('ActivityIndicatorIOS');
-var styles = require('./styles');
-var Utils = require('../../Utils/functions.js');
-var api = require('../../Network/api.js');
-var TodayBanner = require('./TodayBanner.js');
+import {getIconForWeather, getDayName} from '../../Utils/functions.js';
+import {FAKE_DATA, REQUEST_URL} from '../../Network/api.js';
+import TodayBanner from './TodayBanner.js';
 
-var STORAGE_KEY = '@LocalData:data';
+const STORAGE_KEY = '@LocalData:data';
 
-var weatherIcon = {
+const weatherIcon = {
   ic_clear: require('../../Image/ic_clear.png'),
   ic_cloudy: require('../../Image/ic_cloudy.png'),
   ic_fog: require('../../Image/ic_fog.png'),
@@ -28,18 +29,19 @@ var weatherIcon = {
   ic_storm: require('../../Image/ic_storm.png'),
 };
 
-var IndexView = React.createClass({
-  getInitialState: function() {
-    return {
+class IndexView extends Component {
+  constructor(props) {
+    super(props);
+    this.state =  {
       today: {},
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       loaded: false,
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     /*
     NetInfo.fetch().done((reach) => {
       console.log('Initial: ' + reach);
@@ -51,12 +53,13 @@ var IndexView = React.createClass({
     });*/
     // Fake data down here
     this.setState({
-      today: api.FAKE_DATA.list.shift(),
-      dataSource: this.state.dataSource.cloneWithRows(api.FAKE_DATA.list),
+      today: FAKE_DATA.list.shift(),
+      dataSource: this.state.dataSource.cloneWithRows(FAKE_DATA.list),
       loaded: true,
     });
-  },
-  useLocalStorage: function() {
+  }
+  
+  useLocalStorage() {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((value) => {
         var v = JSON.parse(value);
@@ -68,10 +71,10 @@ var IndexView = React.createClass({
       })
       .done();
 
-  },
+  }
 
-  fetchData: function() {
-    fetch(api.REQUEST_URL)
+  fetchData() {
+    fetch(REQUEST_URL)
       .then((response) => response.json())
       .then((responseData) => {
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseData))
@@ -93,9 +96,9 @@ var IndexView = React.createClass({
         this.useLocalStorage();
       })
       .done();
-  },
+  }
 
-  render: function() {
+  render() {
     if (!this.state.loaded) {
       return this.renderLoadingView();
     }
@@ -111,10 +114,10 @@ var IndexView = React.createClass({
          style={styles.listView} />
       </ScrollView>
     );
-  },
-
-  renderRow: function(data) {
-    var icon = Utils.getIconForWeather(data.weather[0].id);
+  }
+  
+  renderRow = (data) => {
+    var icon = getIconForWeather(data.weather[0].id);
     var iconSource = weatherIcon[icon];
     return (
       <TouchableHighlight onPress={()=>{
@@ -129,7 +132,7 @@ var IndexView = React.createClass({
         </View>
         <View style={styles.middleContainer}>
            <Text style={styles.bigDate}>
-             {Utils.getDayName(new Date(data.dt * 1000).getDay())}
+             {getDayName(new Date(data.dt * 1000).getDay())}
            </Text>
            <Text style={styles.smallWeather}>
             {data.weather[0].main}
@@ -147,9 +150,9 @@ var IndexView = React.createClass({
       </View>
       </TouchableHighlight>
     );
-  },
+  }
 
-  renderLoadingView: function() {
+  renderLoadingView() {
     return (
       <View style={styles.horizontal}>
       <ActivityIndicatorIOS
@@ -159,7 +162,69 @@ var IndexView = React.createClass({
       />
       </View>
     );
+  }
+}
+
+const styles = StyleSheet.create({
+  scrollViewUp: {
+    backgroundColor: '#64c2f4',
+    height: 60
+  },
+  scrollView: {
+    backgroundColor: '#EEEEEE',
+  },
+  container: {
+    flex: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EEEEEE',
+    height: 60,
+  },
+  leftContainer: {
+    paddingLeft: 20,
+    flex: 0.8,
+  },
+  middleContainer: {
+    flex: 2.2,
+  },
+  rightContainer: {
+    flex: 1,
+  },
+  listView: {
+    paddingTop: 10,
+    backgroundColor: '#EEEEEE',
+  },
+  bigDate: {
+    color: '#646464',
+    fontSize: 22,
+  },
+  smallWeather: {
+    color: '#646464',
+    fontSize: 14,
+  },
+  bigTemp: {
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  smallTemp: {
+    color: '#646464',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  weatherIcon: {
+    width: 40,
+    height: 40,
+  },
+  centering: {
+    paddingTop: 280,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 
-module.exports = IndexView;
+export default IndexView;

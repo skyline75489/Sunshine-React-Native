@@ -1,6 +1,4 @@
-'use strict';
-
-var dayMap = {
+const dayMap = {
   0: 'Sunday',
   1: 'Monday',
   2: 'Tuesday',
@@ -10,19 +8,19 @@ var dayMap = {
   6: 'Saturday',
 };
 
-var monthNames = ["January", "February", "March", "April", "May", "June",
+const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-exports.getDayName = function(day) {
+export function getDayName(day) {
   return dayMap[day];
 };
 
-exports.getMonthName = function(month) {
+export function getMonthName(month) {
   return monthNames[month];
 };
 
-exports.buildUrl = function(url, parameters){
+export function buildUrl(url, parameters){
   var qs = "";
   for(var key in parameters) {
     var value = parameters[key];
@@ -35,7 +33,7 @@ exports.buildUrl = function(url, parameters){
   return url;
 }
 
-exports.getIconForWeather = function(weatherId) {
+export function getIconForWeather(weatherId) {
   if (weatherId >= 200 && weatherId <= 232) {
     return 'ic_storm';
   } else if (weatherId >= 300 && weatherId <= 321) {
@@ -62,7 +60,7 @@ exports.getIconForWeather = function(weatherId) {
   return -1;
 }
 
-exports.getArtForTodayWeather = function(weatherId) {
+export function getArtForTodayWeather(weatherId) {
   if (weatherId >= 200 && weatherId <= 232) {
     return 'art_storm';
   } else if (weatherId >= 300 && weatherId <= 321) {

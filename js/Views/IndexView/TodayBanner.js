@@ -1,14 +1,15 @@
-'use strict';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableWithoutFeedback
+} from 'react-native';
 
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var View = require('View');
-var Image = require('Image');
-var Text = require('Text');
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var Utils = require('../../Utils/functions.js');
+import {getArtForTodayWeather, getMonthName} from '../../Utils/functions.js';
 
-var todayWeatherArt = {
+const todayWeatherArt = {
   art_clear: require('../../Image/art_clear.png'),
   art_clouds: require('../../Image/art_clouds.png'),
   art_fog: require('../../Image/art_fog.png'),
@@ -18,39 +19,39 @@ var todayWeatherArt = {
   art_storm: require('../../Image/art_storm.png'),
 };
 
-var TodayBanner = React.createClass({
-  onPress: function() {
+class TodayBanner extends Component {
+  onPress = () => {
     this.props.navigator.push({
       name: 'detail',
       detail: this.props.today
     });
-  },
+  }
 
-  render: function() {
-    var today = new Date();
+  render() {
+    const today = new Date();
 
-    var todayArt = Utils.getArtForTodayWeather(this.props.today.weather[0].id);
-    var todayArtSource = todayWeatherArt[todayArt];
+    const todayArt = getArtForTodayWeather(this.props.today.weather[0].id);
+    const todayArtSource = todayWeatherArt[todayArt];
 
     return (
       <TouchableWithoutFeedback onPress={this.onPress}>
-      <View style={todayStyles.todayContainer}>
-        <View style={todayStyles.todayLeftContainer}>
-          <Text style={todayStyles.todayDate}>
-            Today, {Utils.getMonthName(today.getMonth())} {today.getDate()}
+      <View style={styles.todayContainer}>
+        <View style={styles.todayLeftContainer}>
+          <Text style={styles.todayDate}>
+            Today, {getMonthName(today.getMonth())} {today.getDate()}
           </Text>
-          <Text style={todayStyles.todayMaxTemp}>
+          <Text style={styles.todayMaxTemp}>
             {this.props.today.temp.max.toFixed(0)}º
           </Text>
-          <Text style={todayStyles.todayMinTemp}>
+          <Text style={styles.todayMinTemp}>
             {this.props.today.temp.min.toFixed(0)}º
           </Text>
         </View>
 
-        <View style={todayStyles.todayRightContainer}>
-            <Image source={todayArtSource} style={todayStyles.todayArt}>
+        <View style={styles.todayRightContainer}>
+            <Image source={todayArtSource} style={styles.todayArt}>
             </Image>
-            <Text style={todayStyles.todayWeatherMain}>
+            <Text style={styles.todayWeatherMain}>
             {this.props.today.weather[0].main}
             </Text>
         </View>
@@ -58,10 +59,10 @@ var TodayBanner = React.createClass({
     </TouchableWithoutFeedback>
     );
   }
-});
+}
 
 
-var todayStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   todayContainer: {
     flex: 2,
     flexDirection: 'row',
@@ -100,4 +101,4 @@ var todayStyles = StyleSheet.create({
   },
 });
 
-module.exports = TodayBanner;
+export default TodayBanner;
