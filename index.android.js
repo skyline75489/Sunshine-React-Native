@@ -1,48 +1,28 @@
 'use strict';
 
-var React = require('react-native');
-var {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-} = React;
+var React = require('React');
+var Navigator = require('Navigator');
+const {AppRegistry} = require('react-native');
+
+var IndexView = require('./js/Views/IndexView');
+var DetailWeatherView = require('./js/Views/DetailView');
 
 var Sunshine = React.createClass({
+  renderScene: function(route, nav) {
+    switch(route.name) {
+      case 'index':
+        return <IndexView name={route.name} navigator={nav}/>;
+      case 'detail':
+        return <DetailWeatherView name={route.name} navigator={nav} currentDetail={route.detail}></DetailWeatherView>;
+    }
+  },
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+    <Navigator
+      initialRoute={{name: 'index', index: 0}}
+      renderScene={this.renderScene}/>
     );
   }
-});
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
 });
 
 AppRegistry.registerComponent('Sunshine', () => Sunshine);
