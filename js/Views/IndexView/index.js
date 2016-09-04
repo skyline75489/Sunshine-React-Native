@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   AsyncStorage,
   NetInfo,
-  ActivityIndicatorIOS,
+  ActivityIndicator,
 } from 'react-native';
 
 import {getIconForWeather, getDayName} from '../../Utils/functions.js';
@@ -70,7 +70,6 @@ class IndexView extends Component {
         });
       })
       .done();
-
   }
 
   fetchData() {
@@ -103,16 +102,17 @@ class IndexView extends Component {
       return this.renderLoadingView();
     }
     return (
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.scrollViewUp}>
-        </View>
-        <TodayBanner today={this.state.today} navigator={this.props.navigator}>
-        </TodayBanner>
         <ListView
          dataSource={this.state.dataSource}
+         renderHeader={this.renderHeader}
          renderRow={this.renderRow}
          style={styles.listView} />
-      </ScrollView>
+    );
+  }
+
+  renderHeader = () => {
+    return (
+      <TodayBanner today={this.state.today} navigator={this.props.navigator} style={styles.header}/>
     );
   }
   
@@ -155,7 +155,7 @@ class IndexView extends Component {
   renderLoadingView() {
     return (
       <View style={styles.horizontal}>
-      <ActivityIndicatorIOS
+      <ActivityIndicator
         animating={true}
         style={[styles.centering, {height: 80}]}
         size="large"
@@ -166,12 +166,12 @@ class IndexView extends Component {
 }
 
 const styles = StyleSheet.create({
-  scrollViewUp: {
-    backgroundColor: '#64c2f4',
-    height: 60
-  },
   scrollView: {
     backgroundColor: '#EEEEEE',
+  },
+  header: {
+    backgroundColor: '#64c2f4',
+    height: 100,
   },
   container: {
     flex: 4,
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listView: {
-    paddingTop: 10,
     backgroundColor: '#EEEEEE',
   },
   bigDate: {

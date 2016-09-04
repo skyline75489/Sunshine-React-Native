@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 2,
     flexDirection: 'row',
     backgroundColor: '#64c2f4',
-    height: 200,
+    height: 40,
   },
   todayLeftContainer: {
     flex: 1.1,
